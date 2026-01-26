@@ -28,6 +28,9 @@ import org.springframework.context.annotation.Bean;
 import java.util.Scanner;
 
 /**
+ * MCP 注解客户端应用
+ * <p>演示使用注解方式注册 MCP 客户端处理器，通过命令行交互使用 MCP 工具
+ *
  * @author yingzi
  * @since 2025/10/22
  */
@@ -38,19 +41,31 @@ public class AnnotationClientApplication {
         SpringApplication.run(AnnotationClientApplication.class, args);
     }
 
+    /**
+     * 命令行交互程序
+     * <p>启动后进入交互模式，可以输入问题，AI 会调用 MCP 工具回答
+     *
+     * @param chatClientBuilder ChatClient 构建器
+     * @param tools 工具回调提供者，自动扫描并注册带 MCP 注解的工具
+     * @param context Spring 应用上下文
+     */
     @Bean
     public CommandLineRunner predefinedQuestions(ChatClient.Builder chatClientBuilder, ToolCallbackProvider tools,
                                                  ConfigurableApplicationContext context) {
 
         return args -> {
+            // 构建 ChatClient，注册所有 MCP 工具
             var chatClient = chatClientBuilder
                     .defaultToolCallbacks(tools.getToolCallbacks())
                     .build();
 
+            // 打印可用工具列表
             System.out.println("Available tools:");
             for (ToolCallback toolCallback : tools.getToolCallbacks()) {
                 System.out.println(">>> " + toolCallback.getToolDefinition().name());
             }
+            
+            // 命令行交互循环
             Scanner scanner = new Scanner(System.in);
             while (true) {
                 System.out.print("\n>>> QUESTION: ");

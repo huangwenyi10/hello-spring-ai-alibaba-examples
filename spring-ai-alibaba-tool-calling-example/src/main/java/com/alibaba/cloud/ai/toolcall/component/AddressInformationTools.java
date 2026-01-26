@@ -17,6 +17,10 @@ package com.alibaba.cloud.ai.toolcall.component;
 
 import com.alibaba.cloud.ai.toolcalling.baidumap.BaiduMapSearchInfoService;
 
+/**
+ * 地址信息工具类
+ * <p>提供通过百度地图 API 查询地址信息的工具方法
+ */
 public class AddressInformationTools {
 
     private final BaiduMapSearchInfoService service;
@@ -25,6 +29,12 @@ public class AddressInformationTools {
         this.service = service;
     }
 
+    /**
+     * 获取地址详细信息
+     *
+     * @param address 地址关键词
+     * @return 地址详细信息
+     */
     public String getAddressInformation(String address) {
 
         return service.apply(new BaiduMapSearchInfoService.Request(address)).message();

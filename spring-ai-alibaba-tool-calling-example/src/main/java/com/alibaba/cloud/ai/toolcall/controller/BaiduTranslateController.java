@@ -22,6 +22,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * 百度翻译控制器
+ * <p>演示通过工具名称进行工具调用
+ */
 @RestController
 @RequestMapping("/translate")
 public class BaiduTranslateController {
@@ -35,7 +39,7 @@ public class BaiduTranslateController {
     }
 
     /**
-     * No Tool
+     * 普通对话接口（不使用工具）
      */
     @GetMapping("/chat")
     public String simpleChat(@RequestParam(value = "query", defaultValue = "帮我把以下内容翻译成英文：你好，世界。") String query) {
@@ -44,7 +48,8 @@ public class BaiduTranslateController {
     }
 
     /**
-     * Function as Tools - Function Name
+     * 工具调用接口（通过工具名称）
+     * <p>通过 toolNames 指定要使用的工具名称，AI 会自动调用对应的翻译服务
      */
     @GetMapping("/chat-tool-function-callback")
     public String chatTranslateFunction(@RequestParam(value = "query", defaultValue = "帮我把以下内容翻译成英文：你好，世界。") String query) {

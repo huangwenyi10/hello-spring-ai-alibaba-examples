@@ -32,6 +32,9 @@ import org.springframework.web.bind.annotation.RestController;
 import java.lang.reflect.Method;
 
 /**
+ * 地址查询控制器
+ * <p>演示使用 MethodToolCallback 进行工具调用
+ *
  * @author yHong
  * @version 1.0
  * @since 2025/4/18 10:41
@@ -49,7 +52,7 @@ public class AddressController {
     }
 
     /**
-     * No Tool
+     * 普通对话接口（不使用工具）
      */
     @GetMapping("/chat")
     public String chat(@RequestParam(value = "address", defaultValue = "北京") String address) throws JsonProcessingException {
@@ -62,7 +65,8 @@ public class AddressController {
     }
 
     /**
-     * Methods as Tools - MethodToolCallback
+     * 工具调用接口（使用 MethodToolCallback）
+     * <p>通过反射动态构建工具定义，AI 会自动调用百度地图 API 查询地址信息
      */
     @GetMapping("/chat-method-tool-callback")
     public String chatWithBaiduMap(@RequestParam(value = "address", defaultValue = "北京") String address) throws JsonProcessingException {
