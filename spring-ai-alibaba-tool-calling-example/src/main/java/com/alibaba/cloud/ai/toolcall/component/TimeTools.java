@@ -19,6 +19,10 @@ import com.alibaba.cloud.ai.toolcalling.time.GetTimeByZoneIdService;
 import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.ai.tool.annotation.ToolParam;
 
+/**
+ * 时间工具类
+ * <p>提供获取指定时区时间的工具方法，供 AI 模型调用
+ */
 public class TimeTools {
 
     private final GetTimeByZoneIdService timeService;
@@ -27,6 +31,12 @@ public class TimeTools {
         this.timeService = timeService;
     }
 
+    /**
+     * 获取指定时区的当前时间
+     *
+     * @param timeZoneId 时区 ID，例如 Asia/Shanghai
+     * @return 格式化后的时间字符串
+     */
     @Tool(description = "Get the time of a specified city.")
     public String getCityTime(@ToolParam(description = "Time zone id, such as Asia/Shanghai")
                                     String timeZoneId) {

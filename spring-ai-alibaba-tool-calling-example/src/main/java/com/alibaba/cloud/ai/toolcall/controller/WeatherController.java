@@ -23,6 +23,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * 天气查询控制器
+ * <p>演示使用 FunctionToolCallback 进行函数式工具调用
+ */
 @RestController
 @RequestMapping("/weather")
 public class WeatherController {
@@ -38,7 +42,7 @@ public class WeatherController {
     }
 
     /**
-     * No Tool
+     * 普通对话接口（不使用工具）
      */
     @GetMapping("/chat")
     public String simpleChat(@RequestParam(value = "query", defaultValue = "请告诉我北京1天以后的天气") String query) {
@@ -47,7 +51,8 @@ public class WeatherController {
     }
 
     /**
-     * Function as Tools - FunctionCallBack
+     * 工具调用接口（使用 FunctionToolCallback）
+     * <p>将 WeatherService 作为函数工具注册，AI 会自动调用获取天气信息
      */
     @GetMapping("/chat-tool-function-name")
     public String chatWithWeatherFunction(@RequestParam(value = "query", defaultValue = "请告诉我北京1天以后的天气") String query) {

@@ -26,25 +26,41 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * 工具调用自动配置类
+ * <p>注册各种工具服务和 ChatClient Bean
+ */
 @Configuration
 @ConditionalOnClass(GetTimeByZoneIdService.class)
 public class ToolCallAutoConfiguration {
 
+    /**
+     * 注册时区时间服务
+     */
     @Bean
     public GetTimeByZoneIdService getCurrentTimeByTimeZoneIdService() {
         return new GetTimeByZoneIdService();
     }
 
+    /**
+     * 注册时间工具 Bean
+     */
     @Bean
     public TimeTools timeTools(GetTimeByZoneIdService service) {
         return new TimeTools(service);
     }
 
+    /**
+     * 注册地址信息工具 Bean
+     */
     @Bean
     public AddressInformationTools addressInformationTools(BaiduMapSearchInfoService service) {
         return new AddressInformationTools(service);
     }
 
+    /**
+     * 配置 ChatClient，添加日志拦截器
+     */
     @Bean
     public ChatClient chatClient(ChatModel chatModel) {
         return ChatClient.builder(chatModel)
