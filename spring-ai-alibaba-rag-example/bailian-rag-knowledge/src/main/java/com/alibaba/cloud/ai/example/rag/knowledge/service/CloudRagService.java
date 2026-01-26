@@ -40,23 +40,25 @@ import java.io.InputStream;
 import java.util.List;
 
 /**
- * Title Cloud rag service.<br>
- * Description Cloud rag service.<br>
+ * 百炼云 RAG 服务实现
+ * <p>基于 DashScope 云向量库实现文档检索增强生成
  *
  * @author yuanci.ytb
  * @since 1.0.0-M2
  */
-
 @Service()
 public class CloudRagService implements RagService {
 
 	private static final Logger logger = LoggerFactory.getLogger(CloudRagService.class);
 
+	/** 向量库索引名称 */
 	private static final String indexName = "微服务";
 
+	/** 待导入的文档资源 */
 	@Value("classpath:/data/spring_ai_alibaba_quickstart.pdf")
 	private Resource springAiResource;
 
+	/** RAG 检索系统提示词模板 */
 	private static final String retrievalSystemTemplate = """
 			Context information is below.
 			---------------------
@@ -71,6 +73,12 @@ public class CloudRagService implements RagService {
 
 	private final DashScopeApi dashscopeApi;
 
+	/**
+	 * 构造函数，初始化 ChatClient 和文档检索器
+	 *
+	 * @param builder ChatClient 构建器
+	 * @param dashscopeApi DashScope API 客户端
+	 */
 	public CloudRagService(ChatClient.Builder builder, DashScopeApi dashscopeApi) {
 		DocumentRetriever retriever = new DashScopeDocumentRetriever(dashscopeApi,
 				DashScopeDocumentRetrieverOptions.builder().withIndexName(indexName).build());
@@ -81,21 +89,31 @@ public class CloudRagService implements RagService {
 				.build();
 	}
 
+	/**
+	 * 导入文档到云向量库
+	 * <p>读取 PDF 文档，自动分割后存储到 DashScope 向量库
+	 */
 	@Override
 	public void importDocuments() {
 		String path = saveToTempFile(springAiResource);
 
-		// 1. import and split documents
+		// 1. 导入并分割文档
 		DocumentReader reader = new DashScopeDocumentCloudReader(path, dashscopeApi, null);
 		List<Document> documentList = reader.get();
 		logger.info("{} documents loaded and split", documentList.size());
 
-		// 1. add documents to DashScope cloud storage
+		// 2. 添加文档到 DashScope 云向量库
 		VectorStore vectorStore = new DashScopeCloudStore(dashscopeApi, new DashScopeStoreOptions(indexName));
 		vectorStore.add(documentList);
 		logger.info("{} documents added to dashscope cloud vector store", documentList.size());
 	}
 
+	/**
+	 * 保存资源文件到临时文件
+	 *
+	 * @param springAiResource 资源文件
+	 * @return 临时文件的绝对路径
+	 */
 	private String saveToTempFile(Resource springAiResource) {
 		try {
 			File tempFile = File.createTempFile("spring_ai_alibaba_quickstart", ".pdf");
@@ -117,6 +135,12 @@ public class CloudRagService implements RagService {
 		}
 	}
 
+	/**
+	 * 基于知识库检索并生成回答（流式）
+	 *
+	 * @param message 用户问题
+	 * @return 流式 ChatResponse
+	 */
 	public Flux<ChatResponse> retrieve(String message) {
 		return chatClient.prompt().user(message).stream().chatResponse();
 	}

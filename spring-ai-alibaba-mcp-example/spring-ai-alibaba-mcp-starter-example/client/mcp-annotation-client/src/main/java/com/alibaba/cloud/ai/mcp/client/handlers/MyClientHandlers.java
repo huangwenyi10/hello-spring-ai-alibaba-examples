@@ -25,6 +25,10 @@ import org.springaicommunity.mcp.annotation.McpSampling;
 import org.springframework.stereotype.Component;
 
 /**
+ * MCP 客户端消息处理器
+ * <p>使用注解方式处理来自 MCP 服务器的各种消息通知
+ * <p>注解中的 clients 属性指定要处理的 MCP 客户端名称
+ *
  * @author yingzi
  * @since 2025/10/22
  */
@@ -33,22 +37,35 @@ public class MyClientHandlers {
 
     private static final Logger logger = LoggerFactory.getLogger(MyClientHandlers.class);
 
+    /**
+     * 处理日志消息通知
+     *
+     * @param notification MCP 日志消息通知
+     */
     @McpLogging(clients = "my-mcp-client")
     public void handleLogs(McpSchema.LoggingMessageNotification notification) {
-        // Handle logs
         logger.info("Logs: {}", notification.data());
     }
 
+    /**
+     * 处理采样请求
+     *
+     * @param request MCP 创建消息请求
+     * @return 创建消息结果
+     */
     @McpSampling(clients = "my-mcp-client")
     public McpSchema.CreateMessageResult handleSampling(McpSchema.CreateMessageRequest request) {
-        // Handle sampling
         logger.info("Sampling: {}", request.messages());
         return null;
     }
 
+    /**
+     * 处理进度通知
+     *
+     * @param notification MCP 进度通知
+     */
     @McpProgress(clients = "my-mcp-client")
     public void handleProgress(McpSchema.ProgressNotification notification) {
-        // Handle progress
         logger.info("Progress: {}", notification);
     }
 }

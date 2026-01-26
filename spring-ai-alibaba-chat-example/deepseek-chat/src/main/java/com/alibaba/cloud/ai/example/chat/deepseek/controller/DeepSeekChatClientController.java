@@ -44,8 +44,11 @@ public class DeepSeekChatClientController {
 
     public DeepSeekChatClientController (DeepSeekChatModel chatModel) {
 
-        this.DeepSeekChatClient = ChatClient.builder(chatModel).defaultAdvisors(MessageChatMemoryAdvisor.builder(MessageWindowChatMemory.builder().build()).build())
-                // 实现 Logger 的 Advisor
+        this.DeepSeekChatClient = ChatClient.builder(chatModel)
+                // 添加消息记忆 Advisor：使用 MessageWindowChatMemory 实现基于窗口的消息记忆
+                // MessageWindowChatMemory 会维护一个固定大小的消息窗口，保留最近的对话历史
+                .defaultAdvisors(MessageChatMemoryAdvisor.builder(MessageWindowChatMemory.builder().build()).build())
+                // 添加简单日志 Advisor：记录对话过程中的关键信息，便于调试和问题排查
                 .defaultAdvisors(new SimpleLoggerAdvisor())
                 // 设置 ChatClient 中 ChatModel 的 Options 参数
                 .defaultOptions(DeepSeekChatOptions.builder().temperature(0.7d).build()).build();

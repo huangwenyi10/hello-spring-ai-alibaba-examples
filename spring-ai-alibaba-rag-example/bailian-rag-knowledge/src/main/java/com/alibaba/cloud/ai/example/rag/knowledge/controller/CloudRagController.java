@@ -25,13 +25,12 @@ import com.alibaba.cloud.ai.example.rag.knowledge.service.RagService;
 import reactor.core.publisher.Flux;
 
 /**
- * Title Cloud rag controller.<br>
- * Description Cloud rag controller.<br>
+ * 百炼云知识库 RAG 控制器
+ * <p>提供文档导入和基于知识库的问答功能
  *
  * @author yuanci.ytb
  * @since 1.0.0-M2
  */
-
 @RestController
 @RequestMapping("/ai")
 public class CloudRagController {
@@ -42,14 +41,24 @@ public class CloudRagController {
 		this.cloudRagService = cloudRagService;
 	}
 
+	/**
+	 * 导入文档到百炼云知识库
+	 * <p>将预配置的文档上传并分割后存储到 DashScope 向量库
+	 */
 	@GetMapping("/bailian/knowledge/importDocument")
 	public void importDocument() {
 		cloudRagService.importDocuments();
 	}
 
+	/**
+	 * 基于知识库生成回答（流式输出）
+	 *
+	 * @param message 用户提问内容
+	 * @return 流式返回 AI 生成的回答文本
+	 */
 	@GetMapping("/bailian/knowledge/generate")
 	public Flux<String> generate(@RequestParam(value = "message",
-			defaultValue = "你好，请问你的知识库文档主要是关于什么内容的?") String message) {
+			defaultValue = "你好，请问知识库文档主要是关于什么内容的?") String message) {
 		return cloudRagService.retrieve(message).map(x -> x.getResult().getOutput().getText());
 	}
 

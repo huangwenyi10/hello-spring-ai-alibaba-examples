@@ -48,7 +48,8 @@ public class DeepSeekChatModelController {
      */
     @GetMapping("/simple/chat")
     public String simpleChat () {
-        return DeepSeekChatModel.call(new Prompt(DEFAULT_PROMPT)).getResult().getOutput().getText();
+        return DeepSeekChatModel.call(new Prompt(DEFAULT_PROMPT))
+                .getResult().getOutput().getText();
     }
 
     /**
