@@ -23,7 +23,7 @@ spring:
         sse:
           connections:
             server1:
-              url: http://localhost:8080 # 本地
+              url: http://localhost:8080 # 连接到 MCP 服务器
         annotation-scanner:
           enabled: true
 #            server2:

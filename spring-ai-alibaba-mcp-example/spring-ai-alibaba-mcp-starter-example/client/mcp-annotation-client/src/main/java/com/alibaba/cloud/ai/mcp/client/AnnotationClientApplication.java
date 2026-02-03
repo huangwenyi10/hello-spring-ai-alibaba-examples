@@ -56,8 +56,7 @@ public class AnnotationClientApplication {
         return args -> {
             // 构建 ChatClient，注册所有 MCP 工具
             var chatClient = chatClientBuilder
-                    .defaultToolCallbacks(tools.getToolCallbacks())
-                    .build();
+                    .defaultToolCallbacks(tools.getToolCallbacks()).build();
 
             // 打印可用工具列表
             System.out.println("Available tools:");

@@ -16,12 +16,21 @@
 
 package com.alibaba.cloud.ai.mcp.server;
 
+import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
+ * MCP 注解式服务器应用主类
+ * <p>使用 Spring Boot 自动配置，自动扫描并注册带有 {@code @McpTool} 注解的工具方法
+ * <p>基于 WebFlux 实现响应式 MCP 服务器
+ *
  * @author yingzi
  * @since 2025/10/22
  */
 @SpringBootApplication
 public class AnnotationServerApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(AnnotationServerApplication.class, args);
+    }
 }

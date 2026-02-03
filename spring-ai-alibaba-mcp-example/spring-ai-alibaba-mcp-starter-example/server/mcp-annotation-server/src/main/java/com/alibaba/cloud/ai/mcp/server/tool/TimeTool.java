@@ -27,6 +27,9 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
 /**
+ * 时间工具服务
+ * <p>提供获取指定时区当前时间的 MCP 工具
+ *
  * @author yingzi
  * @since 2025/10/22
  */
@@ -35,6 +38,13 @@ public class TimeTool {
 
     private static final Logger logger = LoggerFactory.getLogger(TimeTool.class);
 
+    /**
+     * 获取指定时区的当前时间
+     * <p>通过 {@code @McpTool} 注解注册为 MCP 工具，可被 MCP 客户端调用
+     *
+     * @param timeZoneId 时区ID，例如 "Asia/Shanghai"
+     * @return 格式化的时间字符串，包含时区信息
+     */
     @McpTool(name = "getCityTime", description = "Get the time of a specified city.")
     public String  getCityTimeMethod(@McpToolParam(description = "Time zone id, such as Asia/Shanghai", required = true) String timeZoneId) {
         logger.info("The current time zone is {}", timeZoneId);
@@ -42,18 +52,23 @@ public class TimeTool {
                 getTimeByZoneId(timeZoneId));
     }
 
+    /**
+     * 根据时区ID获取格式化的时间字符串
+     *
+     * @param zoneId 时区ID
+     * @return 格式化的时间字符串，格式为 "yyyy-MM-dd HH:mm:ss z"
+     */
     private String getTimeByZoneId(String zoneId) {
-
-        // Get the time zone using ZoneId
+        // 获取时区对象
         ZoneId zid = ZoneId.of(zoneId);
 
-        // Get the current time in this time zone
+        // 获取该时区的当前时间
         ZonedDateTime zonedDateTime = ZonedDateTime.now(zid);
 
-        // Defining a formatter
+        // 定义时间格式化器
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss z");
 
-        // Format ZonedDateTime as a string
+        // 格式化时间为字符串
         String formattedDateTime = zonedDateTime.format(formatter);
 
         return formattedDateTime;
