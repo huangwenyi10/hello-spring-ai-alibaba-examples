@@ -35,6 +35,8 @@ public class McpServerApplication {
 
     @Bean
     public ToolCallbackProvider weatherTools(OpenMeteoService openMeteoService) {
+        // 将OpenMeteoService 这个服务类注册成 ToolCallbackProvider
+        //把 OpenMeteoService 这个 Bean 里的所有 @Tool 方法，注册成 MCP 工具
         return MethodToolCallbackProvider.builder().toolObjects(openMeteoService).build();
     }
 

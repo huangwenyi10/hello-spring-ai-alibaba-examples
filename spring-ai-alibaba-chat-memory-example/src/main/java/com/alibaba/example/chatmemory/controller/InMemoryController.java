@@ -40,13 +40,16 @@ public class InMemoryController {
 
     private final ChatClient chatClient;
     private final InMemoryChatMemoryRepository chatMemoryRepository = new InMemoryChatMemoryRepository();
+    // 经验建议：maxMessages 不要设得过大，否则上下文变长、延迟和成本都会上去，一般几十到一两百就够用。
     private final int MAX_MESSAGES = 100;
+    // MessageWindowChatMemory 在上面加一层“只保留最近 N 条”的窗口
     private final MessageWindowChatMemory messageWindowChatMemory = MessageWindowChatMemory.builder()
             .chatMemoryRepository(chatMemoryRepository)
             .maxMessages(MAX_MESSAGES)
             .build();
 
     public InMemoryController(ChatClient.Builder builder) {
+        // 通过 MessageChatMemoryAdvisor 把这段记忆接到 ChatClient 上
         this.chatClient = builder
                 .defaultAdvisors(
                         MessageChatMemoryAdvisor.builder(messageWindowChatMemory)
@@ -56,9 +59,10 @@ public class InMemoryController {
     }
 
     @GetMapping("/call")
-    public String call(@RequestParam(value = "query", defaultValue = "你好，我的外号是影子，请记住呀") String query,
-                       @RequestParam(value = "conversation_id", defaultValue = "yingzi") String conversationId
+    public String call(@RequestParam(value = "query", defaultValue = "你好，我的外号是Map，请记住呀") String query,
+                       @RequestParam(value = "conversation_id", defaultValue = "map") String conversationId
     ) {
+        //把 conversation_id 传进去，记忆就会按会话隔离。
         return chatClient.prompt(query)
                 .advisors(
                         a -> a.param(CONVERSATION_ID, conversationId)

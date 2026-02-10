@@ -14,6 +14,8 @@ spring:
         instructions: "This reactive server provides time information tools and resources"
         request-timeout: 20s
         streamable-http:
+          # http://localhost:20000/mcp 的 MCP 端点
           mcp-endpoint: /mcp
+          # 生产里可以把 request-timeout、keep-alive-interval 按实际 QPS 和网络情况调大一点，避免长对话或网络抖动时被过早断开
           keep-alive-interval: 30s
           disallow-delete: false

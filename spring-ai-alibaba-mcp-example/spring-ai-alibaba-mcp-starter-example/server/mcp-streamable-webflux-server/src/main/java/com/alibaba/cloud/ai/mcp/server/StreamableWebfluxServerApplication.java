@@ -36,6 +36,7 @@ public class StreamableWebfluxServerApplication {
 
     @Bean
     public ToolCallbackProvider timeTools(TimeService timeService) {
+        //用 MethodToolCallbackProvider 把 TimeService 里的方法注册成 MCP 工具
         return MethodToolCallbackProvider.builder().toolObjects(timeService).build();
     }
 }

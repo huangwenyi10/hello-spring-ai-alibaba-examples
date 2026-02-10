@@ -35,6 +35,8 @@ public class TimeService {
 
     private static final Logger logger = LoggerFactory.getLogger(TimeService.class);
 
+    //getCityTimeMethod，上面打了 @Tool 和 @ToolParam，入参是时区 ID，
+    // 比如 Asia/Shanghai、America/New_York，内部用 ZoneId 和 ZonedDateTime 算出当前时间再格式化成字符串返回。
     @Tool(description = "Get the time of a specified city.")
     public String  getCityTimeMethod(@ToolParam(description = "Time zone id, such as Asia/Shanghai") String timeZoneId) {
         logger.info("The current time zone is {}", timeZoneId);

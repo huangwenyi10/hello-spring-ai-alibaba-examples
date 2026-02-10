@@ -37,6 +37,9 @@ public class StreamableWebfluxClientApplication {
         SpringApplication.run(StreamableWebfluxClientApplication.class, args);
     }
 
+    //在控制台看到 QUESTION 提示符后，输入「北京现在几点」或「纽约和上海时差多少」，
+    //客户端会通过 STREAMABLE 协议连到 20000 的 /mcp，发现 getCityTimeMethod 工具，
+    //由模型决定传 Asia/Shanghai 或 America/New_York 等参数，服务端返回时间字符串，模型再组织成一句人话回复给你
     @Bean
     public CommandLineRunner predefinedQuestions(ChatClient.Builder chatClientBuilder, ToolCallbackProvider tools,
                                                  ConfigurableApplicationContext context) {

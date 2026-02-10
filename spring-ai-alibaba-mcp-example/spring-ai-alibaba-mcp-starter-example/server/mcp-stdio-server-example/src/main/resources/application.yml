@@ -1,6 +1,8 @@
 spring:
   main:
+    # 必须禁用 web 应用类型
     web-application-type: none
+    # 必须禁用 banner 和控制台日志，以确保 STDIO 传输正常工作
     banner-mode: off
   ai:
     mcp:

@@ -5,6 +5,7 @@ spring:
   application:
     name: mcp-webflux-client-example
   main:
+    # 把 web-application-type 设置成 none，代表这是一个非 Web 控制台应用
     web-application-type: none
   ai:
     dashscope:

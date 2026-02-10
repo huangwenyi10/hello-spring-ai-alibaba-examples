@@ -35,7 +35,10 @@ public class Application {
 		SpringApplication.run(Application.class, args);
 	}
 
-
+	// 浏览器或上游系统把一个“北京天气怎么样”的问题丢给 MCP WebFlux Client；Client 通过 SSE 长连到 http://localhost:8080/sse/mcp；
+	// 模型判断需要工具，就向 MCP Server 发起 tools/list，发现有 getWeatherForecastByLocation 和 getAirQuality 两个工具；
+	// 然后发起 callTool 请求，带上北京的经纬度；Server 这边由 OpenMeteoService 调外部 OpenMeteo API
+	// 或生成模拟 AQI 数据，把结果封装成文本，通过 SSE 流回 Client，最后再由 Chat 层把结果转成一段自然语言回复给用户。
 	@Bean
 	public CommandLineRunner predefinedQuestions(ChatClient.Builder chatClientBuilder, ToolCallbackProvider tools,
 			ConfigurableApplicationContext context) {

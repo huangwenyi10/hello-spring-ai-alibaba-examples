@@ -40,7 +40,7 @@ public class OpenMeteoService {
 
     // OpenMeteo免费天气API基础URL
     private static final String BASE_URL = "https://api.open-meteo.com/v1";
-
+    // 用 RestClient 调 OpenMeteo 的免费天气 API，不需要任何 API Key
     private final RestClient restClient;
 
     public OpenMeteoService() {

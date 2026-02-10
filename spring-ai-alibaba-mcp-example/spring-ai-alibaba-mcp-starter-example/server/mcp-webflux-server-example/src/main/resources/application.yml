@@ -29,9 +29,13 @@ spring:
       server:
         name: my-weather-server
         type: ASYNC  # Recommended for reactive applications
+        # 指定了 MCP Server 的模式
         # 配置 sse 的根路径，默认值为 /sse
         # 下面的最终路径为 ip:port/sse/mcp
+        # 最终对外暴露的是 http://localhost:8080/sse/mcp 这个 SSE MCP 入口，
+        # 把一个普通 WebFlux 应用，升级成了 MCP 服务器
         protocol: sse
         sse-endpoint: /sse
+        # 消息端点 /mcp
         sse-message-endpoint: /mcp
 
