@@ -24,28 +24,33 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * 结构化输出示例：使用 DashScope 原生 JSON 模式。
+ * 通过 response_format=json_object 约束模型输出为合法 JSON。
+ */
 @RestController
 @RequestMapping("/json")
 public class JsonController {
 
     private final ChatClient chatClient;
+    /** DashScope 响应格式配置，指定 JSON_OBJECT 模式 */
     private final DashScopeResponseFormat responseFormat;
 
     public JsonController(ChatClient.Builder builder) {
-        // AI模型内置支持JSON模式
         DashScopeResponseFormat responseFormat = new DashScopeResponseFormat();
         responseFormat.setType(DashScopeResponseFormat.Type.JSON_OBJECT);
 
         this.responseFormat = responseFormat;
-        this.chatClient = builder
-                .build();
+        this.chatClient = builder.build();
     }
 
+    /** 普通调用，无格式约束，模型可能返回非标准 JSON */
     @GetMapping("/chat")
     public String simpleChat(@RequestParam(value = "query", defaultValue = "请以JSON格式介绍你自己") String query) {
         return chatClient.prompt(query).call().content();
     }
 
+    /** 推荐用法：通过 options 注入 responseFormat，模型以 JSON_OBJECT 模式输出 */
     @GetMapping("/chat-format")
     public String simpleChatFormat(@RequestParam(value = "query", defaultValue = "请以JSON格式介绍你自己") String query) {
         return chatClient.prompt(query)

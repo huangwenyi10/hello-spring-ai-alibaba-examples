@@ -18,7 +18,11 @@ package com.alibaba.cloud.ai.example.outparser.entity;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
-@JsonPropertyOrder({"title", "date", "author", "content"}) // 指定属性的顺序
+/**
+ * 结构化输出目标 Bean，用于 BeanOutputConverter 解析。
+ * 字段需与 prompt 中约定的 JSON 结构一致。
+ */
+@JsonPropertyOrder({"title", "date", "author", "content"})
 public class BeanEntity {
 
     private String title;

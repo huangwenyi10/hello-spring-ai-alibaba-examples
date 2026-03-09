@@ -31,26 +31,30 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 结构化输出示例：将大模型输出解析为 Map 或 List。
+ * 通过 OUTPUT_FORMAT Advisor 注入格式约束，配合 MapOutputConverter/ListOutputConverter 解析。
+ */
 @RestController
 @RequestMapping("/map-list")
 public class MapListController {
 
-    private static final Logger log = LoggerFactory.getLogger(BeanController.class);
+    private static final Logger log = LoggerFactory.getLogger(MapListController.class);
 
     private final ChatClient chatClient;
+    /** Map 转换器，将模型输出解析为 Map<String, Object> */
     private final MapOutputConverter mapConverter;
+    /** List 转换器，将模型输出解析为 List<String> */
     private final ListOutputConverter listConverter;
 
     public MapListController(ChatClient.Builder builder) {
-        // map转换器
         this.mapConverter = new MapOutputConverter();
-        // list转换器
         this.listConverter = new ListOutputConverter(new DefaultConversionService());
 
-        this.chatClient = builder
-                .build();
+        this.chatClient = builder.build();
     }
 
+    /** 通过 Advisor 注入 mapConverter.getFormat()，模型按 Map 结构输出，entity 自动解析 */
     @GetMapping("/chatMap")
     public Map<String, Object> chatMap(@RequestParam(value = "query", defaultValue = "请为我描述下影子的特性") String query) {
         return chatClient.prompt(query)
@@ -59,6 +63,7 @@ public class MapListController {
                 ).call().entity(mapConverter);
     }
 
+    /** 通过 Advisor 注入 listConverter.getFormat()，模型按 List 结构输出，entity 自动解析 */
     @GetMapping("/chatList")
     public List<String> chatList(@RequestParam(value = "query", defaultValue = "请为我描述下影子的特性") String query) {
         return chatClient.prompt(query)
